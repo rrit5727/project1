@@ -30,7 +30,7 @@ console.log(imgEls)
 
 
 //EVENT LISTENERS
-
+document.querySelector('main').addEventListener('click', handleMove);
 
 
 
@@ -46,8 +46,8 @@ function init() {
     // const originalDeck = buildOriginalDeck(animals);
     const shuffledDeck = getNewShuffledDeck(originalDeck);
     const srcValues = getSrcValues(board);
-    setdivElAttributes(srcValues);
-    console.log(originalDeck); // Log the original deck
+    // setdivElAttributes(srcValues);
+    const allocatedImgClasses = allocateImgClasses(imgEls)
     console.log(board); // Log the shuffled deck
     console.log(srcValues);
     
@@ -68,8 +68,8 @@ function init() {
 function animalKeysToArray(arr) {
     const originalDeck = [];
     for (const key in arr) {
-        const animal1 = key + '1';
-        const animal2 = key + '2';
+        const animal1 = key; 
+        const animal2 = key; 
         originalDeck.push(animal1, animal2)
     } 
     return originalDeck
@@ -104,21 +104,49 @@ function getNewShuffledDeck(originalDeck) {
     board.push(tempDeck.splice(rndIdx, 1)[0]);
   }
   return board;
+  
 }
+
+function allocateImgClasses(imgEls, idx) {
+   imgEls.forEach(function(imgEl, idx) {
+   imgEl.className = board[idx];
+    
+   });
+   console.log(imgEls)
+}
+
 
 function getSrcValues(arr) { 
   return arr.map(function(animal) {
-    const animalWithoutIdentifier = animal.slice(0, -1);
-        return images[animalWithoutIdentifier]
+        return images[animal]
   });
 }  
 
 
-function setdivElAttributes(srcValues) { 
-     imgEls.forEach(function(imgEl, idx) {
-       imgEl.src = srcValues[idx];
-       console.log(imgEl);
-    });
+
+let firstImgClass = null;
+
+function handleMove(evt, srcValues) {
+  evt.target.src = images[evt.target.className];
+  const clickedImgClass = evt.target.className;
+  if (firstImgClass === null) {
+    firstImgClass = clickedImgClass;
+  } else if (firstImgClass === clickedImgClass) {
+    console.log("Classes Match!")
+  } else {console.log("Classes Do not Match!")}
+    
+  // const idx = parseInt(evt.target.id.replace('sq-',''));
+    // // evt.target.src = srcValues[idx] ;
+    // console.log(evt.target);
+    //   console.log(srcValues[idx]);
+    
 }
 
 
+
+function setImgElAttributes(srcValues) { 
+  imgEls.forEach(function(imgEl, idx) {
+    imgEl.src = srcValues[idx];
+    console.log(imgEl);
+ });
+}
