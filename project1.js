@@ -9,6 +9,8 @@ const images = {
     owl: 'imgs/owl.png',
     rabbit: 'imgs/rabbit.png',
     squirrel: 'imgs/squirrel.png',
+    wolf: 'imgs/wolf.png',
+    fox: 'imgs/fox.png',
 }
 
 
@@ -22,8 +24,8 @@ let board, turn, winner;
 
 
 //CACHED ELEMENTS
-const divEls = document.querySelectorAll('main > div')
-console.log(divEls)
+const imgEls = document.querySelectorAll('main > img')
+console.log(imgEls)
 
 
 
@@ -48,7 +50,8 @@ function init() {
     console.log(originalDeck); // Log the original deck
     console.log(board); // Log the shuffled deck
     console.log(srcValues);
-    console.log(divEls)
+    
+    
  }
 
 
@@ -112,9 +115,10 @@ function getSrcValues(arr) {
 
 
 function setdivElAttributes(srcValues) { 
-    divEls.forEach(function(divEl, idx) {
-     divEl.src = srcValues[idx]
-});
+     imgEls.forEach(function(imgEl, idx) {
+       imgEl.src = srcValues[idx];
+       console.log(imgEl);
+    });
 }
 
 

@@ -22,10 +22,12 @@ body {
 
 }
 
-#board > div {
+#board > img {
     margin: 3vmin;
     background-color: lightskyblue;
     border: 1vmin solid white;
     border-radius: 2vmin;
-
+    width: auto;
+    height: auto;
+    object-fit: cover;
 }
