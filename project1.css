@@ -16,7 +16,7 @@ body {
 #board {
     display: grid; 
     grid-template-columns: repeat(5, 20vmin);
-    grid-template-rows: repeat(5, 20vmin);
+    grid-template-rows: repeat(4, 20vmin);
     background-color: lightblue;
     border-radius: 5vmin;
 
@@ -24,10 +24,10 @@ body {
 
 #board > img {
     margin: 3vmin;
-    background-color: lightskyblue;
+    background-color: white;
     border: 1vmin solid white;
     border-radius: 2vmin;
-    width: auto;
-    height: auto;
-    object-fit: cover;
+    width: 15vmin;
+    height: 15vmin;
+    object-fit: contain;
 }
