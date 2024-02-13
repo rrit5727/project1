@@ -25,7 +25,7 @@ let board, turn, winner;
 
 //CACHED ELEMENTS
 const imgEls = document.querySelectorAll('main > img')
-console.log(imgEls)
+// console.log(imgEls)
 
 
 
@@ -48,22 +48,13 @@ function init() {
     const srcValues = getSrcValues(board);
     // setdivElAttributes(srcValues);
     const allocatedImgClasses = allocateImgClasses(imgEls)
-    console.log(board); // Log the shuffled deck
-    console.log(srcValues);
+    // console.log(board); // Log the shuffled deck
+    // console.log(srcValues);
     
     
  }
 
 
-// function buildOriginalDeck() {
-//     const deck = []
-//     images.forEach(animal){
-//         deck.push({
-//             animal: `${animal}`
-//         })
-//     }
-
-// }
 
 function animalKeysToArray(arr) {
     const originalDeck = [];
@@ -123,24 +114,43 @@ function getSrcValues(arr) {
 }  
 
 
-
+let matchedCardClasses = [];
 let firstImgClass = null;
+let previousImgId = null;
 
 function handleMove(evt, srcValues) {
-  evt.target.src = images[evt.target.className];
-  const clickedImgClass = evt.target.className;
+  const clickedImg = evt.target;
+
+  if (previousImgId === clickedImg.id) {
+    return;
+  }  
+   previousImgId = clickedImg.id;
+
+  clickedImg.src = images[clickedImg.className];
+  const clickedImgClass = clickedImg.className;
   if (firstImgClass === null) {
     firstImgClass = clickedImgClass;
   } else if (firstImgClass === clickedImgClass) {
-    console.log("Classes Match!")
-  } else {console.log("Classes Do not Match!")}
-    
-  // const idx = parseInt(evt.target.id.replace('sq-',''));
-    // // evt.target.src = srcValues[idx] ;
-    // console.log(evt.target);
-    //   console.log(srcValues[idx]);
-    
+    matchedCardClasses.push(firstImgClass);
+    console.log("Classes Match!");
+    firstImgClass = null;
+  } else {
+    setTimeout(function() {
+      imgEls.forEach(function(imgEl) {
+        if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
+        imgEl.src = "imgs/Card_default.png";
+        }
+      });
+    }, 1000)
+    firstImgClass = null;
+    }
+  console.log(matchedCardClasses);
 }
+
+
+    
+    
+
 
 
 
