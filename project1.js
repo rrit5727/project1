@@ -19,6 +19,7 @@ const cardDeck = [];
 
 //STATE
 let board, turn, winner;
+let clickCounter = 0;
 
 
 
@@ -118,10 +119,32 @@ let matchedCardClasses = [];
 let firstImgClass = null;
 let previousImgId = null;
 
+
 function handleMove(evt, srcValues) {
+  
+  clickCounter ++;
+  
+  if (evt.target.id === 'board') {
+    evt.stopPropagation(); 
+    return;
+  }
+
+  if (clickCounter === 3) {
+    clickCounter = 0;
+    return;
+    }
+
+  if (evt.target.id === 'board') {
+    return;
+  } 
+
+
+  console.log(clickCounter)
+  console.log(evt.target)
+
   const clickedImg = evt.target;
 
-  if (previousImgId === clickedImg.id) {
+   if (previousImgId === clickedImg.id) {
     return;
   }  
    previousImgId = clickedImg.id;
@@ -134,17 +157,22 @@ function handleMove(evt, srcValues) {
     matchedCardClasses.push(firstImgClass);
     console.log("Classes Match!");
     firstImgClass = null;
+    clickCounter = 0;
   } else {
     setTimeout(function() {
       imgEls.forEach(function(imgEl) {
         if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
         imgEl.src = "imgs/Card_default.png";
+        clickCounter = 0;
         }
       });
     }, 1000)
     firstImgClass = null;
+    
     }
   console.log(matchedCardClasses);
+
+  
 }
 
 
