@@ -20,18 +20,21 @@ const cardDeck = [];
 //STATE
 let board, turn, winner;
 let clickCounter = 0;
+let timer = false;
 
 
 
 
 //CACHED ELEMENTS
-const imgEls = document.querySelectorAll('main > img')
+const imgEls = document.querySelectorAll('img')
 // console.log(imgEls)
 
 
 
 //EVENT LISTENERS
-document.querySelector('main').addEventListener('click', handleMove);
+imgEls.forEach(function(imgEl) {
+  imgEl.addEventListener('click', handleMove)
+})
 
 
 
@@ -122,48 +125,56 @@ let previousImgId = null;
 
 function handleMove(evt, srcValues) {
   
-  clickCounter ++;
+  // if (evt.target.id === 'board') {
+  //   console.log('click')
+  //   return;
+  // }
+
   
-  if (evt.target.id === 'board') {
-    evt.stopPropagation(); 
-    return;
-  }
+  // if (evt.target.id === 'board') {
+    //   evt.stopPropagation(); 
+    //   console.log("click")
+    //   return;
+    // }
+    
+    // if (clickCounter === 3) {
+    //   clickCounter = 0;
+    //   return;
+    // }
+    
+    if (timer === true) {
+      return;
+    } 
+    
 
-  if (clickCounter === 3) {
-    clickCounter = 0;
-    return;
-    }
-
-  if (evt.target.id === 'board') {
-    return;
-  } 
-
-
-  console.log(clickCounter)
+    console.log(clickCounter)
   console.log(evt.target)
 
   const clickedImg = evt.target;
 
-   if (previousImgId === clickedImg.id) {
+  if (previousImgId === clickedImg.id) {
     return;
   }  
-   previousImgId = clickedImg.id;
+  previousImgId = clickedImg.id;
 
   clickedImg.src = images[clickedImg.className];
   const clickedImgClass = clickedImg.className;
   if (firstImgClass === null) {
     firstImgClass = clickedImgClass;
+    // clickCounter ++;
   } else if (firstImgClass === clickedImgClass) {
     matchedCardClasses.push(firstImgClass);
     console.log("Classes Match!");
     firstImgClass = null;
-    clickCounter = 0;
+    // clickCounter = 0;
   } else {
+    timer = true;
     setTimeout(function() {
+      timer = false;
       imgEls.forEach(function(imgEl) {
         if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
         imgEl.src = "imgs/Card_default.png";
-        clickCounter = 0;
+        // clickCounter = 0;
         }
       });
     }, 1000)
