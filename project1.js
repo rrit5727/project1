@@ -18,16 +18,20 @@ const cardDeck = [];
 
 
 //STATE
-let board, turn, winner;
-let clickCounter = 0;
+let board, turn = 0, winner;
 let timer = false;
-
+let announcementDefault = "Pick a Card";
+let matchMessage = "It's a match!";
+let lossMessage = "Game over";
+let loss = null;
+// let announcementDefault
 
 
 
 //CACHED ELEMENTS
-const imgEls = document.querySelectorAll('img')
-// console.log(imgEls)
+const imgEls = document.querySelectorAll('img');
+const announcementEl = document.querySelector('h1');
+const guessLogEl = document.querySelector('h3');
 
 
 
@@ -54,8 +58,8 @@ function init() {
     const allocatedImgClasses = allocateImgClasses(imgEls)
     // console.log(board); // Log the shuffled deck
     // console.log(srcValues);
-    
-    
+    displayMessage();
+    displayIncorrectGuessCounter();
  }
 
 
@@ -72,18 +76,6 @@ function animalKeysToArray(arr) {
 
 
 
-
-
-// function buildOriginalDeck(animals) {
-//     const originalDeck = {};
-//     animals.forEach(function(animal, index) {
-//         const card1 = 'card' + (index * 2 + 1); // Generate 'card1', 'card3', 'card5', ...
-//         const card2 = 'card' + (index * 2 + 2); // Generate 'card2', 'card4', 'card6', ...
-//         originalDeck[card1] = animal + '1';
-//         originalDeck[card2] = animal + '2';
-//     });
-//     return originalDeck;
-// }
 
 
 // Example usage:
@@ -124,32 +116,11 @@ let previousImgId = null;
 
 
 function handleMove(evt, srcValues) {
-  
-  // if (evt.target.id === 'board') {
-  //   console.log('click')
-  //   return;
-  // }
-
-  
-  // if (evt.target.id === 'board') {
-    //   evt.stopPropagation(); 
-    //   console.log("click")
-    //   return;
-    // }
-    
-    // if (clickCounter === 3) {
-    //   clickCounter = 0;
-    //   return;
-    // }
-    
-    if (timer === true) {
-      return;
+       if (timer === true ||
+          loss) {
+        return;
     } 
-    
-
-    console.log(clickCounter)
-  console.log(evt.target)
-
+       
   const clickedImg = evt.target;
 
   if (previousImgId === clickedImg.id) {
@@ -161,12 +132,11 @@ function handleMove(evt, srcValues) {
   const clickedImgClass = clickedImg.className;
   if (firstImgClass === null) {
     firstImgClass = clickedImgClass;
-    // clickCounter ++;
-  } else if (firstImgClass === clickedImgClass) {
+      } else if (firstImgClass === clickedImgClass) {
     matchedCardClasses.push(firstImgClass);
-    console.log("Classes Match!");
+    displayMatch();
     firstImgClass = null;
-    // clickCounter = 0;
+    
   } else {
     timer = true;
     setTimeout(function() {
@@ -174,26 +144,56 @@ function handleMove(evt, srcValues) {
       imgEls.forEach(function(imgEl) {
         if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
         imgEl.src = "imgs/Card_default.png";
-        // clickCounter = 0;
         }
       });
     }, 1000)
     firstImgClass = null;
-    
+    turn++;
+    console.log("turncounter: "+turn);
+    displayIncorrectGuessCounter();
+    loss = lossChecker();
+    console.log(loss);
     }
   console.log(matchedCardClasses);
+  }
+        
+  function displayMessage() {
+    announcementEl.innerHTML = announcementDefault;
+   }  
 
+  //  function displayGuesses() {
+  //   guessLogEl.innerHTML = ;
+  //  }
+
+  function displayMatch() {
+    announcementEl.innerHTML = matchMessage;
+    setTimeout(function() {
+      announcementEl.innerHTML = announcementDefault;
+    
+  }, 1500)
+  }
+
+  function displayLoss() {
+    if (loss) {
+      announcementEl.innerHTML = lossMessage;
+    } return;
+    }
+
+    function lossChecker() {
+      if (turn > 4) {
+        return true;
+      } else {
+        return null;
+      }
+    }
+
+    function displayIncorrectGuessCounter() {
+      guessLogEl.innerHTML = `Incorrect guesses: ${turn}`;
+    }
+
+    
   
-}
-
-
-    
-    
-
-
-
-
-function setImgElAttributes(srcValues) { 
+  function setImgElAttributes(srcValues) { 
   imgEls.forEach(function(imgEl, idx) {
     imgEl.src = srcValues[idx];
     console.log(imgEl);

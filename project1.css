@@ -31,3 +31,31 @@ body {
     height: 15vmin;
     object-fit: contain;
 }
+
+h1 {
+    border: solid black;
+    color: goldenrod            ;
+}
+
+main {
+display: grid;
+grid-template-rows: ;
+grid-template-columns: 7fr 2fr;
+}
+
+#score {
+    border: solid green;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    border-radius: 5vmin;
+    background-color: off;
+}
+
+h3 {
+    white-space: pre-wrap;    
+    margin-left: 5px;
+    max-width: 100px;
+}
