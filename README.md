@@ -4,7 +4,10 @@
 
 ## Screenshots
 ### Start up screen
-![start-up screen](Readme src/game complete.png)
+![start-up screen](Readme_images/Game_start-up.png)
+![Match screen](Readme_images/Card_match.png)
+![Gameover screen](Readme_images/Gameover.png)
+![Gameover screen](Readme_images/Game_complete.png)
 
 ### Match message
 ![Game complete screen]()
