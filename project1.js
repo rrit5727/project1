@@ -116,20 +116,27 @@ let previousImgId = null;
 
 
 function handleMove(evt, srcValues) {
-       if (timer === true ||
-          loss) {
+       
+  if (timer === true) {
         return;
     } 
+
+    if (loss) {
+      displayLoss();
+      return; 
+    }
        
   const clickedImg = evt.target;
-
-  if (previousImgId === clickedImg.id) {
-    return;
-  }  
-  previousImgId = clickedImg.id;
+  console.log(clickedImg)
+  // if (previousImgId === clickedImg.id) {
+  //   return;
+  // }  
+  // previousImgId = clickedImg.id;
 
   clickedImg.src = images[clickedImg.className];
   const clickedImgClass = clickedImg.className;
+  clickedImg.classList.add('animate__animated', 'animate__flipInY');
+  
   if (firstImgClass === null) {
     firstImgClass = clickedImgClass;
       } else if (firstImgClass === clickedImgClass) {
@@ -143,7 +150,12 @@ function handleMove(evt, srcValues) {
       timer = false;
       imgEls.forEach(function(imgEl) {
         if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
-        imgEl.src = "imgs/Card_default.png";
+          imgEl.classList.remove('animate__animated', 'animate__flipInY');
+          console.log(imgEl.src)
+          if(imgEl.src = images[imgEl.className]) {
+            imgEl.src = "imgs/Card_default.png";
+            imgEl.classList.add('animate__animated', 'animate__flipInY');
+          } 
         }
       });
     }, 1000)
@@ -180,7 +192,7 @@ function handleMove(evt, srcValues) {
     }
 
     function lossChecker() {
-      if (turn > 4) {
+      if (turn > 20) {
         return true;
       } else {
         return null;
