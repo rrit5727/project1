@@ -18,7 +18,7 @@ const cardDeck = [];
 
 
 //STATE
-let board, turn = 0, winner;
+let board, turn = 0;
 let timer = false;
 let announcementDefault = "Pick a Card";
 let matchMessage = "It's a match!";
@@ -27,20 +27,16 @@ let loss = null;
 // let announcementDefault
 
 
-
 //CACHED ELEMENTS
 const imgEls = document.querySelectorAll('img');
 const announcementEl = document.querySelector('h1');
 const guessLogEl = document.querySelector('h3');
 
 
-
 //EVENT LISTENERS
 imgEls.forEach(function(imgEl) {
   imgEl.addEventListener('click', handleMove)
 })
-
-
 
 
 //FUNCTIONS
@@ -51,19 +47,14 @@ init();
 function init() {
     board = [];
     const originalDeck = animalKeysToArray(images);
-    // const originalDeck = buildOriginalDeck(animals);
     const shuffledDeck = getNewShuffledDeck(originalDeck);
-    const srcValues = getSrcValues(board);
-    // setdivElAttributes(srcValues);
+    
     const allocatedImgClasses = allocateImgClasses(imgEls)
-    // console.log(board); // Log the shuffled deck
-    // console.log(srcValues);
     displayMessage();
     displayIncorrectGuessCounter();
  }
 
-
-
+//take animals from image array, duplicate, allocate to array for original deck
 function animalKeysToArray(arr) {
     const originalDeck = [];
     for (const key in arr) {
@@ -74,26 +65,21 @@ function animalKeysToArray(arr) {
     return originalDeck
 } 
 
-
-
-
-
-// Example usage:
-
+//copy the original deck, shuffle, push each random selection to the board
 function getNewShuffledDeck(originalDeck) {
-  // Create a copy of the originalDeck (leave originalDeck untouched!)
-  const tempDeck = [...originalDeck];
-  
-  while (tempDeck.length) {
-    
-    const rndIdx = Math.floor(Math.random() * tempDeck.length);
-    
-    board.push(tempDeck.splice(rndIdx, 1)[0]);
-  }
-  return board;
-  
-}
+    // Create a copy of the originalDeck 
+      const tempDeck = [...originalDeck];
+      
+      while (tempDeck.length) {
+          const rndIdx = Math.floor(Math.random() * tempDeck.length);
+          board.push(tempDeck.splice(rndIdx, 1)[0]);
+      }
+      return board;
+      }
 
+
+//Allocates animal-specific class name based on the board to 
+//the image elements  
 function allocateImgClasses(imgEls, idx) {
    imgEls.forEach(function(imgEl, idx) {
    imgEl.className = board[idx];
@@ -103,74 +89,76 @@ function allocateImgClasses(imgEls, idx) {
 }
 
 
-function getSrcValues(arr) { 
-  return arr.map(function(animal) {
-        return images[animal]
-  });
-}  
-
-
+//initialise variables for the event handler 
+//could be put in the function but it aint broke so...
 let matchedCardClasses = [];
 let firstImgClass = null;
 let previousImgId = null;
 
 
-function handleMove(evt, srcValues) {
-       if (timer === true) {
+//event handler
+function handleMove(evt) {
+  //guard against selecting 3 cards in a row  
+    if (timer === true) {
         return;
     } 
 
+  //guard preventing further play if loss condition is true
     if (loss) {
-      displayLoss();
-      return; 
+        displayLoss();
+        return; 
     }
-       
+      
   const clickedImg = evt.target;
 
+  //guard against selecting the same card twice
   if (previousImgId === clickedImg.id) {
     return;
   }
   
   previousImgId = clickedImg.id;
 
-  clickedImg.src = images[clickedImg.className];
   const clickedImgClass = clickedImg.className;
-  if (firstImgClass === null) {
-    firstImgClass = clickedImgClass;
+  //this changes the clicked image's src attribute 
+  //by looking up its classname in the images array
+  clickedImg.src = images[clickedImgClass];
+  //1st click branch of the handler - stores the 1st click's class 
+      if (firstImgClass === null) {
+          firstImgClass = clickedImgClass;
+  //match branch of the handler code block
       } else if (firstImgClass === clickedImgClass) {
-    matchedCardClasses.push(firstImgClass);
-    displayMatch();
-    firstImgClass = null;
-    
-  } else {
-    timer = true;
-    setTimeout(function() {
-      timer = false;
-      previousImgId = null;
-      imgEls.forEach(function(imgEl) {
-        if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
-        imgEl.src = "imgs/Card_default.png";
+          matchedCardClasses.push(firstImgClass);
+          displayMatch();
+          firstImgClass = null;
+  
+  //'Not a match' branch of the code block
+      } else {
+          timer = true;
+          setTimeout(function() {
+              timer = false;
+              previousImgId = null;
+              imgEls.forEach(function(imgEl) {
+    //this ensures that matched cards stay face-up
+                  if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
+                      imgEl.src = "imgs/Card_default.png";
+                  }
+              });
+          }, 1000)
+          firstImgClass = null;
+          turn++;
+          console.log("turncounter: "+turn);
+          displayIncorrectGuessCounter();
+          loss = lossChecker();
+          console.log(loss);
         }
-      });
-    }, 1000)
-    firstImgClass = null;
-    turn++;
-    console.log("turncounter: "+turn);
-    displayIncorrectGuessCounter();
-    loss = lossChecker();
-    console.log(loss);
-    }
   console.log(matchedCardClasses);
   }
         
   function displayMessage() {
-    announcementEl.innerHTML = announcementDefault;
-   }  
+      announcementEl.innerHTML = announcementDefault;
+    }  
 
-  //  function displayGuesses() {
-  //   guessLogEl.innerHTML = ;
-  //  }
-
+  
   function displayMatch() {
     announcementEl.innerHTML = matchMessage;
     setTimeout(function() {
@@ -179,12 +167,16 @@ function handleMove(evt, srcValues) {
   }, 1500)
   }
 
+  //checks if the loss value is true, 
+  //if so, logs a loss message to the h1 element
   function displayLoss() {
     if (loss) {
       announcementEl.innerHTML = lossMessage;
     } return;
     }
 
+  //checks if the number of guesses > 10 
+  //if so, update loss variable to true
     function lossChecker() {
       if (turn > 10) {
         return true;
@@ -199,9 +191,4 @@ function handleMove(evt, srcValues) {
 
     
   
-  function setImgElAttributes(srcValues) { 
-  imgEls.forEach(function(imgEl, idx) {
-    imgEl.src = srcValues[idx];
-    console.log(imgEl);
- });
-}
+  
