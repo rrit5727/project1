@@ -127,7 +127,10 @@ function handleMove(evt, srcValues) {
        
   const clickedImg = evt.target;
 
-   
+  if (previousImgId === clickedImg.id) {
+    return;
+  }
+  
   previousImgId = clickedImg.id;
 
   clickedImg.src = images[clickedImg.className];
@@ -143,6 +146,7 @@ function handleMove(evt, srcValues) {
     timer = true;
     setTimeout(function() {
       timer = false;
+      previousImgId = null;
       imgEls.forEach(function(imgEl) {
         if (!matchedCardClasses.includes(imgEl.className.toLowerCase()) ) {
         imgEl.src = "imgs/Card_default.png";
