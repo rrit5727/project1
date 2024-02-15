@@ -186,7 +186,7 @@ function handleMove(evt, srcValues) {
     }
 
     function lossChecker() {
-      if (turn > 4) {
+      if (turn > 20) {
         return true;
       } else {
         return null;

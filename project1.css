@@ -1,17 +1,16 @@
 * {
 box-sizing: border-box;
 font-family: Arial, Helvetica, sans-serif;
+
 }
 
 body {
     height: 100vh;
     margin: 0;
-    display: flex;
+    display: flex;  
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-
-}
+ }
 
 #board {
     display: grid; 
@@ -20,6 +19,14 @@ body {
     background-color: lightblue;
     border-radius: 5vmin;
 
+}
+
+#messages {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 400px;
 }
 
 #board > img {
@@ -33,14 +40,14 @@ body {
 }
 
 h1 {
-    border: solid black;
     color: goldenrod;
 }
 
 main {
-display: grid;
-grid-template-rows: ;
-grid-template-columns: 7fr 2fr;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
 }
 
 #score {
@@ -55,7 +62,7 @@ grid-template-columns: 7fr 2fr;
 }
 
 h3 {
-    white-space: pre-wrap;    
+        
     margin-left: 5px;
-    max-width: 100px;
+    
 }
