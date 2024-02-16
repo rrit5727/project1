@@ -7,9 +7,6 @@
 ![start-up screen](Readme_images/Game_start-up.png)
 
 
-### Match message
-
-
 ## Technologies Used 
 * JavaScript
 * HTML 
