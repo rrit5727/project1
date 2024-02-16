@@ -18,7 +18,7 @@ const cardDeck = [];
 
 
 //STATE
-let board, turn = 0;
+let board, incorrectGuesses = 0;
 let timer = false;
 let announcementDefault = "Pick a Card";
 let matchMessage = "It's a match!";
@@ -52,8 +52,9 @@ function init() {
     const allocatedImgClasses = allocateImgClasses(imgEls)
     displayMessage();
     displayIncorrectGuessCounter();
- }
-
+  }
+  console.log("board: " + board)
+  
 //take animals from image array, duplicate, allocate to array for original deck
 function animalKeysToArray(arr) {
     const originalDeck = [];
@@ -75,11 +76,14 @@ function getNewShuffledDeck(originalDeck) {
           board.push(tempDeck.splice(rndIdx, 1)[0]);
       }
       return board;
+      
       }
 
 
 //Allocates animal-specific class name based on the board to 
-//the image elements  
+//the image elements - used in checking matches and allocating 
+//image src attributes later on - this effectively 'renders' the animal positions in the 
+// board to the image elements in HTML - doersn't actually render though
 function allocateImgClasses(imgEls, idx) {
    imgEls.forEach(function(imgEl, idx) {
    imgEl.className = board[idx];
@@ -96,7 +100,7 @@ let firstImgClass = null;
 let previousImgId = null;
 
 
-//event handler
+//////////event handler//////////
 function handleMove(evt) {
   //guard against selecting 3 cards in a row  
     if (timer === true) {
@@ -145,13 +149,13 @@ function handleMove(evt) {
               });
           }, 1000)
           firstImgClass = null;
-          turn++;
-          console.log("turncounter: "+turn);
+          incorrectGuesses++;
+          console.log("incorrectGuessescounter: "+incorrectGuesses);
           displayIncorrectGuessCounter();
           loss = lossChecker();
           console.log(loss);
         }
-  console.log(matchedCardClasses);
+  console.log("matchedCardClasses " + matchedCardClasses);
   }
         
   function displayMessage() {
@@ -178,7 +182,7 @@ function handleMove(evt) {
   //checks if the number of guesses > 10 
   //if so, update loss variable to true
     function lossChecker() {
-      if (turn > 10) {
+      if (incorrectGuesses > 4) {
         return true;
       } else {
         return null;
@@ -186,7 +190,7 @@ function handleMove(evt) {
     }
 
     function displayIncorrectGuessCounter() {
-      guessLogEl.innerHTML = `Incorrect guesses: ${turn}`;
+      guessLogEl.innerHTML = `Incorrect guesses: ${incorrectGuesses}`;
     }
 
     
